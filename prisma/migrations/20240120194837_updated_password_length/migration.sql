@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "user" ALTER COLUMN "lastName" DROP NOT NULL,
+ALTER COLUMN "password" SET DATA TYPE VARCHAR(400);

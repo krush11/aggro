@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,9 +7,12 @@ datasource db {
   url      = env("POSTGRESQL_URL")
 }
 
-model User {
-  username String @unique
-  email    String @unique
-  password String
-  name     String
+model user {
+  id        String   @id @default(cuid())
+  username  String   @unique @db.VarChar(20)
+  firstName String   @db.VarChar(50)
+  lastName  String?  @db.VarChar(50)
+  email     String   @unique @db.VarChar(50)
+  password  String   @db.VarChar(100)
+  tools     String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(50)[]")) @db.VarChar(50)
 }
