@@ -19,10 +19,8 @@ export default function Client() {
       })
     }
 
-    if (state?.status === 200) {
-      localStorage.setItem('auth-token', state?.status)
-      redirect('/')
-    }
+    if (state?.status === 200)
+      redirect('/dashboard')
   }, [state])
 
   return (

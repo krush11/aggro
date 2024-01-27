@@ -7,6 +7,16 @@ const nextConfig = {
     });
     return config;
   },
+  async redirects() {
+    return [
+      {
+        source: '/',
+        destination: '/dashboard',
+        permanent: false
+      }
+    ]
+  }
+  // logging: { fetches: { fullUrl: true } }
 }
 
 module.exports = nextConfig

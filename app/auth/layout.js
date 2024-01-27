@@ -9,11 +9,11 @@ import { useEffect } from 'react';
 export default function RootLayout({ children }) {
   const pathname = usePathname();
 
-  /* TODO: Implement token revalidation */
   useEffect(() => {
     const token = localStorage.getItem('auth-token');
-    if (token && pathname.includes('/auth'))
-      window.location.href = '/';
+
+    if (token && pathname.startsWith('/auth'))
+      window.location.href = '/dashboard';
   }, [pathname])
 
   return (

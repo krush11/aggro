@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "user" ALTER COLUMN "tools" SET DEFAULT ARRAY[]::VARCHAR(50)[];

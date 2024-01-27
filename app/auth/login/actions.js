@@ -1,29 +1,46 @@
 'use server'
 
-import { user } from "@/lib/prisma";
+import { User } from "@/prisma/prisma";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import jwt from 'jsonwebtoken';
+import { SignJWT } from 'jose/dist/node/esm/jwt/sign';
 import bcrypt from 'bcrypt';
+import { cookies } from "next/headers";
 
 export async function login(_, formData) {
   const identity = formData.get('identity');
   const password = formData.get('password');
 
   try {
-    const userByUsername = await user.findUnique({ where: { username: identity }, });
-    const userByEmail = await user.findUnique({ where: { email: identity }, });
-    const User = userByUsername || userByEmail;
+    const userByUsername = await User.findUnique({ where: { username: identity }, });
+    const userByEmail = await User.findUnique({ where: { email: identity }, });
+    const user = userByUsername || userByEmail;
 
-    if (!User || !bcrypt.compareSync(password, User.password))
+    if (!user)
+      return { status: 400, error: 'User not found' }
+
+    if (!bcrypt.compareSync(password, user.password))
       return { status: 400, error: 'Invalid credentials' }
 
-    const token = jwt.sign({ id: User.id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 * 7 });
-    return { status: 200, token }
+    const auth_token = await new SignJWT({ id: user.id })
+      .setProtectedHeader({ alg: 'HS256' })
+      .setIssuedAt()
+      .setExpirationTime('1w')
+      .sign(new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET));
+
+    cookies().set('auth-token', auth_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    })
+
+    return { status: 200 }
   } catch (err) {
-    console.log(err)
-    if (err instanceof PrismaClientKnownRequestError) {
+    if (err instanceof PrismaClientKnownRequestError)
       return { status: 400, error: err.message }
-    }
+
+    return { status: 500, error: err.message }
   }
 }
 

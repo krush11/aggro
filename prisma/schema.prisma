@@ -1,18 +1,65 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["multiSchema"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("POSTGRESQL_URL")
+  schemas  = ["app", "todo", "notes"]
 }
 
-model user {
-  id        String   @id @default(cuid())
-  username  String   @unique @db.VarChar(20)
-  firstName String   @db.VarChar(50)
-  lastName  String?  @db.VarChar(50)
-  email     String   @unique @db.VarChar(50)
-  password  String   @db.VarChar(100)
-  tools     String[] @default(dbgenerated("(ARRAY[]::character varying[])::character varying(50)[]")) @db.VarChar(50)
+model AppUsers {
+  id        String      @id @unique @default(cuid()) @db.VarChar(50)
+  username  String      @unique @db.VarChar(20)
+  firstName String      @db.VarChar(50)
+  lastName  String?     @db.VarChar(50)
+  email     String      @unique @db.VarChar(50)
+  password  String      @db.VarChar(100)
+  ToolUsers ToolUsers[]
+
+  @@map("users")
+  @@schema("app")
+}
+
+model Tools {
+  id             String      @id @unique @default(cuid()) @db.VarChar(50)
+  name           String      @db.VarChar(50)
+  codename       String      @db.VarChar(50)
+  description    String      @db.VarChar(50)
+  url            String      @db.VarChar(50)
+  category       String?     @db.VarChar(50)
+  tags           String[]    @default(dbgenerated("(ARRAY[]::character varying[])::character varying(50)[]")) @db.VarChar(50)
+  primaryColor   String?      @db.VarChar(50)
+  secondaryColor String?     @db.VarChar(50)
+  tertiaryColor  String?     @db.VarChar(50)
+  ToolUsers      ToolUsers[]
+
+  @@map("tools")
+  @@schema("app")
+}
+
+model ToolUsers {
+  userID String   @db.VarChar(50)
+  toolID String   @db.VarChar(50)
+  user   AppUsers @relation(fields: [userID], references: [id])
+  tool   Tools    @relation(fields: [toolID], references: [id])
+
+  @@id([userID, toolID])
+  @@map("tooluser")
+  @@schema("app")
+}
+
+model ToDoUsers {
+  id String @id @unique @db.VarChar(50)
+
+  @@map("users")
+  @@schema("todo")
+}
+
+model NotesUsers {
+  id String @id @unique @db.VarChar(50)
+
+  @@map("users")
+  @@schema("notes")
 }

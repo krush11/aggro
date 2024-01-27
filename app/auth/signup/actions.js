@@ -1,9 +1,10 @@
 'use server'
 
-import { user } from "@/lib/prisma";
+import { User } from "@/prisma/prisma";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { SignJWT } from "jose";
+import { cookies } from "next/headers";
 
 export async function createAccount(prevState, formData) {
   const firstName = formData.get('firstName');
@@ -16,13 +17,25 @@ export async function createAccount(prevState, formData) {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(password, salt);
 
-    const User = await user.create({
+    const user = await User.create({
       data: { firstName, lastName, username, email, password: hash }
     });
 
-    const token = jwt.sign({ id: User.id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 * 24 * 7 });
+    const auth_token = await new SignJWT({ id: user.id })
+    .setProtectedHeader({ alg: 'HS256' })
+    .setIssuedAt()
+    .setExpirationTime('1w')
+    .sign(new TextEncoder().encode(process.env.ACCESS_TOKEN_SECRET));
 
-    return { status: 200, token }
+    cookies().set('auth-token', auth_token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      path: '/',
+      maxAge: 60 * 60 * 24 * 7,
+    })
+
+    return { status: 200 }
   } catch (err) {
     if (err instanceof PrismaClientKnownRequestError && err.code === 'P2002') {
       const field = err.meta.target[0].charAt(0).toUpperCase() + err.meta.target[0].slice(1);
@@ -31,6 +44,8 @@ export async function createAccount(prevState, formData) {
         error: field + ' already exists. Please use a different ' + field + ' or try logging in.',
       }
     }
+
+    console.log(err)
   }
 }
 
