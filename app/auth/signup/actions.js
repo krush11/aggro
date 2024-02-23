@@ -44,8 +44,6 @@ export async function createAccount(prevState, formData) {
         error: field + ' already exists. Please use a different ' + field + ' or try logging in.',
       }
     }
-
-    console.log(err)
   }
 }
 

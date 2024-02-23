@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google'
+import { Inter, } from 'next/font/google'
 import './globals.css'
 import 'react-toastify/dist/ReactToastify.css';
 import AppLayout from './AppLayout'
@@ -13,7 +13,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className + 'w-full'}>
+      <body className={inter.className + 'w-full h-full'}>
         <AppLayout>
           {children}
         </AppLayout>

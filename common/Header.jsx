@@ -22,15 +22,12 @@ export default function Component() {
     const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target))
         setIsProfileDropdownOpen(false);
-    };
-
-    document.addEventListener('mousedown', handleOutsideClick);
+    }
 
     fetchUser()
-
-    return () => {
-      document.removeEventListener('mousedown', handleOutsideClick);
-    };
+    
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick)
   }, []);
 
   return (
@@ -45,7 +42,8 @@ export default function Component() {
         </span>
         {isProfileDropdownOpen &&
           <div className='absolute right-0 top-8 w-40 border rounded-md bg-white py-1 drop-shadow-lg'>
-            <a href='/dashboard' className='inline-block text-sm font-medium w-full py-2 px-4 hover:bg-red-500 hover:text-white' onClick={() => { redirect('/auth/login') }}>
+            <a href='/dashboard' onClick={() => { redirect('/auth/login') }}
+              className='inline-block text-sm font-medium w-full py-2 px-4 hover:bg-red-500 hover:text-white'>
               Logout
             </a>
           </div>}

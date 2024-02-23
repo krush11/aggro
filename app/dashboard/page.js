@@ -5,7 +5,7 @@ import Client from "./client";
 export const revalidate = 60 * 60;
 
 async function fetchTools() {
-  const toolsList = await Tools.findMany({ include: { ToolUsers: true } })
+  const toolsList = await Tools.findMany({ include: { ToolUsers: true }})
   return toolsList
 }
 

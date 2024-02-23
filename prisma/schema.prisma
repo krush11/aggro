@@ -12,27 +12,28 @@ datasource db {
 model AppUsers {
   id        String      @id @unique @default(cuid()) @db.VarChar(50)
   username  String      @unique @db.VarChar(20)
-  firstName String      @db.VarChar(50)
-  lastName  String?     @db.VarChar(50)
+  firstName String
+  lastName  String?
   email     String      @unique @db.VarChar(50)
   password  String      @db.VarChar(100)
   ToolUsers ToolUsers[]
+  Todo      Todo[]
 
   @@map("users")
   @@schema("app")
 }
 
 model Tools {
-  id             String      @id @unique @default(cuid()) @db.VarChar(50)
-  name           String      @db.VarChar(50)
-  codename       String      @db.VarChar(50)
-  description    String      @db.VarChar(50)
-  url            String      @db.VarChar(50)
-  category       String?     @db.VarChar(50)
-  tags           String[]    @default(dbgenerated("(ARRAY[]::character varying[])::character varying(50)[]")) @db.VarChar(50)
-  primaryColor   String?      @db.VarChar(50)
-  secondaryColor String?     @db.VarChar(50)
-  tertiaryColor  String?     @db.VarChar(50)
+  id             String      @id @unique @default(cuid())
+  name           String
+  codename       String
+  description    String
+  url            String
+  category       String?
+  tags           String[]    @default([])
+  primaryColor   String?
+  secondaryColor String?
+  tertiaryColor  String?
   ToolUsers      ToolUsers[]
 
   @@map("tools")
@@ -40,8 +41,8 @@ model Tools {
 }
 
 model ToolUsers {
-  userID String   @db.VarChar(50)
-  toolID String   @db.VarChar(50)
+  userID String
+  toolID String
   user   AppUsers @relation(fields: [userID], references: [id])
   tool   Tools    @relation(fields: [toolID], references: [id])
 
@@ -50,16 +51,14 @@ model ToolUsers {
   @@schema("app")
 }
 
-model ToDoUsers {
-  id String @id @unique @db.VarChar(50)
+model Todo {
+  id          String    @id @unique @default(cuid())
+  task        String
+  createdOn   DateTime  @default(now())
+  completedOn DateTime?
+  userID      String
+  user        AppUsers  @relation(fields: [userID], references: [id])
 
-  @@map("users")
+  @@map("tasks")
   @@schema("todo")
-}
-
-model NotesUsers {
-  id String @id @unique @db.VarChar(50)
-
-  @@map("users")
-  @@schema("notes")
 }
