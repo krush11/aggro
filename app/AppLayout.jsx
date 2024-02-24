@@ -6,7 +6,7 @@ import Redirector from './Redirector';
 export default function Layout({ children }) {
   return (
     <div className='flex flex-col max-h-screen bg-[#f0f0f2]'>
-      <Redirector />
+      <Redirector>{children}</Redirector>
       <Header />
       <ToastContainer position='bottom-right' />
       <div className='flex flex-row flex-1 overflow-auto'>

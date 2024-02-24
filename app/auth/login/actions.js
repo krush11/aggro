@@ -2,7 +2,7 @@
 
 import { User } from "@/prisma/prisma";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
-import { SignJWT } from 'jose/dist/node/esm/jwt/sign';
+import { SignJWT } from 'jose';
 import bcrypt from 'bcrypt';
 import { cookies } from "next/headers";
 
