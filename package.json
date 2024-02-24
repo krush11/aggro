@@ -4,12 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbo",
-    "build": "next build",
+    "build": "prisma generate && npm build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
-    "@prisma/client": "^5.6.0",
+    "@prisma/client": "^5.10.2",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "bcrypt": "^5.1.1",
@@ -25,7 +25,7 @@
     "postcss": "^8",
     "prettier": "^3.1.0",
     "prettier-plugin-tailwindcss": "^0.5.7",
-    "prisma": "^5.6.0",
+    "prisma": "^5.10.2",
     "tailwindcss": "^3.3.0"
   }
 }
