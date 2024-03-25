@@ -1,5 +1,4 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import validateUser from "./validateUser";
 import { User } from "@/prisma/prisma";
 
@@ -16,6 +15,7 @@ export async function getUser() {
       select: {
         id: true, email: true, firstName: true, lastName: true, username: true,
         ToolUsers: {
+          // populating tools to fetch value specially for navbar
           select: { tool: true },
           where: { userID: userID },
         }

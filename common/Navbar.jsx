@@ -1,16 +1,17 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { getUser } from '@/utils/getUser';
+import { redirect } from 'next/navigation';
 
 async function fetchUserTools() {
-  const userTools = await getUser();
-  const tools = userTools.ToolUsers.map(x => x.tool)
+  const userTools = await getUser()
+  if (userTools == null) redirect('/auth/login')
 
-  return tools;
+  return userTools.ToolUsers.map(x => x.tool);
 }
 
 export default async function Component() {
-  const tools = await fetchUserTools();
+  const tools = await fetchUserTools()
 
   return (
     <nav className="border-r px-2">
