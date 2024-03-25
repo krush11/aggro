@@ -1,4 +1,4 @@
-import { ToolUsers, User } from "@/prisma/prisma"
+import { ToolUsers } from "@/prisma/prisma"
 import { getUser } from "@/utils/getUser"
 import { NextResponse } from "next/server"
 

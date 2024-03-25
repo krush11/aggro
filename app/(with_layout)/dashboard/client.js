@@ -8,7 +8,7 @@ export default function Client({ user, tools }) {
   const [onboardingTool, setOnboardingTool] = useState(null)
 
   return (
-    <div className="relative">
+    <div className="relative p-4">
       {onboardingTool && <ToolOnboarding user={user} tool={onboardingTool} setOnboardingTool={setOnboardingTool} />}
       <h1 className="text-2xl mb-4">Which tool can we help you with today?</h1>
       <div className="grid grid-cols-6 gap-4 max-[1600px]:grid-cols-6">

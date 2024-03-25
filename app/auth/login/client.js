@@ -24,7 +24,7 @@ export default function Client() {
   }, [state])
 
   return (
-    <div className="w-1/4 ">
+    <div className="w-1/4">
       <form className="border p-6 rounded-md" action={handleLogin}>
         <h2 className="text-center font-semibold uppercase text-xl text-gray-800">Sign in to your account</h2>
         <div className="mt-8">
