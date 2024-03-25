@@ -12,7 +12,9 @@ export default function Component() {
   const tool = usePathname().split('/')[1]
 
   async function fetchUser() {
-    const res = await fetch('/api/user')
+    const res = await fetch('/api/user', {
+      next: { revalidate: 60 * 10, tags: ['user-details'] }
+    })
     const user = await res.json()
     setUser(user)
 

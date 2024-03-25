@@ -26,3 +26,11 @@ export async function deleteTask(taskID) {
   revalidatePath('/todo')
   return
 }
+
+export async function addTask(formData) {
+  'use server'
+  const taskDesc = formData.get('task')
+
+  await ToDoTasks.create({ data: { task: taskDesc, userID: user.id } })
+  revalidatePath('/todo', 'page')
+}

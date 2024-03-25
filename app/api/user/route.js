@@ -1,5 +1,6 @@
 import { User } from "@/prisma/prisma";
 import { jwtVerify } from "jose";
+import { revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 
@@ -15,7 +16,11 @@ export async function GET() {
     select: { email: true, firstName: true, lastName: true, ToolUsers: true, username: true }
   })
 
-  if (!user) return NextResponse.json({ error: 'User not found' }, { status: 401 })
+  if (!user) {
+    revalidateTag('user-details')
+    return NextResponse.json({ error: 'User not found' }, { status: 401 })
+  }
+
 
   return NextResponse.json(user, { status: 200 })
 }

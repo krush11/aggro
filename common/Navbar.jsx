@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { getUser } from '@/utils/getUser';
 import { redirect } from 'next/navigation';
 
+export const revalidate = 60 * 60
+
 async function fetchUserTools() {
   const userTools = await getUser()
   if (userTools == null) redirect('/auth/login')

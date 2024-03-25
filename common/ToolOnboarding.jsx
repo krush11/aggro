@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache"
 import Image from "next/image"
 import { toast } from "react-toastify"
 
@@ -15,6 +16,7 @@ export default function ToolOnboarding({ user, tool, setOnboardingTool }) {
       switch (res.status) {
         case 200:
           toast.success(`Tool added successfully. Redirecting to ${tool.name} app`)
+          revalidatePath('/dashboard', 'layout')
           setTimeout(() => { window.location.href = `/${tool.codename}` }, 2000)
           break;
         case 400:

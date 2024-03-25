@@ -1,7 +1,7 @@
 import { ToDoTasks } from "@/prisma/prisma"
 import { getUser } from "@/utils/getUser"
-import { revalidatePath } from "next/cache"
 import { CompletedTaskCard, PendingTaskCard, TaskCreator } from "./client"
+import { addTask } from "./actions"
 
 export const revalidate = 60 * 60
 
@@ -16,14 +16,6 @@ export default async function Page() {
   const [user, tasks] = await getUserTasks()
   const pendingTasks = tasks.filter((task) => !task.completedOn).sort((a, b) => b.createdOn - a.createdOn)
   const completedTasks = tasks.filter((task) => task.completedOn).sort((a, b) => b.completedOn - a.completedOn)
-
-  async function addTask(formData) {
-    'use server'
-    const taskDesc = formData.get('task')
-
-    await ToDoTasks.create({ data: { task: taskDesc, userID: user.id } })
-    revalidatePath('/todo')
-  }
 
   return (
     <div className="max-h-screen p-4 flex flex-col">
