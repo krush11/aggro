@@ -28,8 +28,8 @@ export default function Client() {
       <form className="border p-6 rounded-md" action={handleLogin}>
         <h2 className="text-center font-semibold uppercase text-xl text-gray-800">Sign in to your account</h2>
         <div className="mt-8">
-          <label htmlFor="identity" className="block text-xs font-semibold text-gray-600 uppercase ">E-mail or Username</label>
-          <input id="identity" type="identity" name="identity" placeholder="Enter your e-mail or username" autoComplete="email" required
+          <label htmlFor="username" className="block text-xs font-semibold text-gray-600 uppercase ">E-mail or Username</label>
+          <input id="username" type="text" name="username" placeholder="Enter your e-mail or username" autoComplete="email" required
             className="block w-full p-2 mt-2 text-gray-800 border-b-2 border-gray-100 focus:text-gray-500 focus:outline-none focus:border-gray-200" />
 
           <label htmlFor="password" className="block mt-2 text-xs font-semibold text-gray-600 uppercase">Password</label>

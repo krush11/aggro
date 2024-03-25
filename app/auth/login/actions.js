@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import { cookies } from "next/headers";
 
 export async function login(_, formData) {
-  const identity = formData.get('identity');
+  const identity = formData.get('username');
   const password = formData.get('password');
 
   try {
