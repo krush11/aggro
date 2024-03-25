@@ -5,7 +5,9 @@ import { User } from "@/prisma/prisma";
 
 export async function getUser() {
   const cookieStore = cookies();
-  if (!cookieStore.get('auth-token')) redirect('/auth/login')
+
+  if (!cookieStore.get('auth-token'))
+    return null
 
   const userID = await validateUser(cookieStore.get('auth-token').value)
   try {
@@ -22,7 +24,6 @@ export async function getUser() {
 
     return user
   } catch (err) {
-    console.error(err)
-    return null
+    return err
   }
 }
